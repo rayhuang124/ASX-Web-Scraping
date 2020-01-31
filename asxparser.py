@@ -15,6 +15,11 @@ def snr_management_gender(person): # determining gender of senior management bas
     }
     return switcher.get(person[0:2], "ND")
 
+def extract_data(table_row): # extracts data from a table row, converts it to text form, and returns data as a tuple
+    table_header = table_row.find('th').text.strip()
+    table_data = table_row.find('td').text.strip()
+    return (table_header, table_data)
+
 ASX_company = input("Enter an ASX listed company: ").upper()
 url = "https://www.asx.com.au/asx/share-price-research/company/" + ASX_company + "/details"
 
@@ -29,15 +34,13 @@ company_people_row_list = [["Person", "Role", "Gender"]]
 
 company_details = soup.find('table', attrs={'class':'table-people company-details'}) 
 for table_row in company_details.find_all('tr', attrs={'class':''}):
-    table_header = table_row.find('th').text.strip()
-    table_data = table_row.find('td').text.strip()
+    table_header, table_data = extract_data(table_row)
     csv_row = [table_header, table_data]
     company_detail_row_list.append(csv_row)
 
 company_people = soup.find('table', attrs={'class':'table-people company-people'})
 for table_row in company_people.find_all('tr'):
-    table_header = table_row.find('th').text.strip()
-    table_data = table_row.find('td').text.strip()
+    table_header, table_data = extract_data(table_row)
     gender = snr_management_gender(table_header)
     csv_row = [table_header, table_data, gender]
     company_people_row_list.append(csv_row)
