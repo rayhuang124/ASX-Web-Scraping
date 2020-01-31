@@ -29,7 +29,7 @@ driver.get(url)
 html = driver.page_source
 soup = BeautifulSoup(html, 'html.parser')
 
-company_detail_row_list = [[ASX_company + " Details"]]
+company_detail_row_list = []
 company_people_row_list = [["Person", "Role", "Gender"]]
 
 company_details = soup.find('table', attrs={'class':'table-people company-details'}) 
